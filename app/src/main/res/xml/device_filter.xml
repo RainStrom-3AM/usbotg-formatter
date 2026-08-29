@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <usb-device class="8" subclass="6" protocol="80" />
+    <usb-device class="8" subclass="6" protocol="50" />
+    <usb-device class="8" subclass="5" protocol="80" />
+    <usb-device class="8" subclass="5" protocol="50" />
+    <usb-device class="8" subclass="4" protocol="80" />
+    <usb-device class="8" subclass="4" protocol="50" />
+    <usb-device class="8" subclass="2" protocol="50" />
+</resources>
