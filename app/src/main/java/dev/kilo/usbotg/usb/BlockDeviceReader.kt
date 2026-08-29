@@ -21,7 +21,7 @@ object BlockDeviceReader {
             "NTFS" -> return FsType.NTFS
         }
 
-        val bootSig = b[510].toInt() and 0xFF == 0x55 && b[511].toInt() and 0xFF == 0xAA
+        val bootSig = (b[510].toInt() and 0xFF) == 0x55 && (b[511].toInt() and 0xFF) == 0xAA
         if (bootSig) {
             val fat32 = String(b.sliceArray(82..87), Charsets.US_ASCII)
             if (fat32.startsWith("FAT32")) return FsType.FAT32
