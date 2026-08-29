@@ -10,7 +10,7 @@ import android.hardware.usb.UsbEndpoint
 import android.hardware.usb.UsbInterface
 import android.hardware.usb.UsbManager
 import android.os.Build
-import androidx.core.app.PendingIntentCompat
+import android.app.PendingIntent
 import dev.kilo.usbotg.model.DriveInfo
 import dev.kilo.usbotg.model.FsType
 import me.jahnen.libaums.core.UsbMassStorageDevice
@@ -36,11 +36,16 @@ class UsbDeviceManager(private val context: Context) {
     }
 
     fun requestPermission(device: UsbMassStorageDevice, onResult: (Boolean) -> Unit) {
-        val pi = PendingIntentCompat.getBroadcast(
+        val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            PendingIntent.FLAG_MUTABLE
+        } else {
+            0
+        }
+        val pi = PendingIntent.getBroadcast(
             context,
             0,
             Intent(ACTION_USB_PERMISSION).setPackage(context.packageName),
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntentCompat.FLAG_MUTABLE else 0
+            flags
         )
         val receiver = object : BroadcastReceiver() {
             override fun onReceive(ctx: Context, intent: Intent) {
