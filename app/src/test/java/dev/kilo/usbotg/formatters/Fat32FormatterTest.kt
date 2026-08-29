@@ -49,7 +49,7 @@ class Fat32FormatterTest {
 
     @Test
     fun `formatting emits ordered progress then success`() = runBlocking {
-        val dev = FakeBlockDevice(sectorSize = 512, sectorCount = sectorsForMB(512))
+        val dev = FakeBlockDevice(sectorSize = 512, sectorCount = sectorsForMB(64))
         val events = Fat32Formatter().format(dev, FormatParams()).toList()
         assertTrue(events.first() is FormatEvent.Progress)
         assertTrue(events.last() is FormatEvent.Success)

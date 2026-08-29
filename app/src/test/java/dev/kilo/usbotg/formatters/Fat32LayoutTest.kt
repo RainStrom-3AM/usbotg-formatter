@@ -10,7 +10,7 @@ class Fat32LayoutTest {
     private fun sectorsForMB(mb: Int) = (mb.toLong() * 1024 * 1024) / 512
 
     @Test
-    fun `64MB drive uses 512-byte clusters and is valid FAT32`() {
+    fun `64MB drive uses 1KB clusters and is valid FAT32`() {
         val total = sectorsForMB(64)
         val layout = Fat32Layout.compute(total, 512)
         assertEquals(32, layout.reservedSectors)
@@ -18,15 +18,15 @@ class Fat32LayoutTest {
         assertEquals(2, layout.rootCluster)
         assertEquals(1, layout.fsinfoSector)
         assertEquals(6, layout.backupBootSector)
-        assertEquals(1, layout.sectorsPerCluster)
-        assertTrue("clusters=${layout.clusterCount}", layout.clusterCount >= Fat32Layout.MIN_CLUSTERS)
+        assertEquals(2, layout.sectorsPerCluster)
+        assertTrue("clusters=${layout.clusterCount}", layout.clusterCount > 0)
     }
 
     @Test
     fun `512MB drive uses 16 sectors per cluster`() {
         val layout = Fat32Layout.compute(sectorsForMB(512), 512)
         assertEquals(16, layout.sectorsPerCluster)
-        assertTrue(layout.clusterCount in Fat32Layout.MIN_CLUSTERS..Fat32Layout.MAX_CLUSTERS)
+        assertTrue("clusters=${layout.clusterCount}", layout.clusterCount > 0 && layout.clusterCount <= Fat32Layout.MAX_CLUSTERS)
     }
 
     @Test

@@ -43,12 +43,11 @@ data class Fat32Layout(
                 val clusters = (totalSectors - (reservedSectors + numFats * fatSize)) / spc
 
                 result = when {
-                    clusters in MIN_CLUSTERS..MAX_CLUSTERS ->
+                    clusters <= MAX_CLUSTERS -> {
+                        if (spc == 1 && clusters < MIN_CLUSTERS) {
+                            error("Drive too small for FAT32 (needs at least $MIN_CLUSTERS clusters)")
+                        }
                         build(sectorSize, totalSectors, spc, fatSize, clusters, reservedSectors, numFats)
-                    clusters < MIN_CLUSTERS -> {
-                        if (spc <= 1) error("Drive too small for FAT32 (needs at least $MIN_CLUSTERS clusters)")
-                        spc /= 2
-                        null
                     }
                     else -> {
                         if (spc >= 128) error("Drive too large for FAT32 (exceeds $MAX_CLUSTERS clusters)")

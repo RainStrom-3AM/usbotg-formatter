@@ -12,6 +12,9 @@ class Fat32StructuresTest {
     private fun intAt(bytes: ByteArray, offset: Int): Int =
         ByteBuffer.wrap(bytes).order(ByteOrder.LITTLE_ENDIAN).getInt(offset)
 
+    private fun shortAt(bytes: ByteArray, offset: Int): Int =
+        ByteBuffer.wrap(bytes).order(ByteOrder.LITTLE_ENDIAN).getShort(offset).toInt()
+
     @Test
     fun `boot sector has 55AA signature and FAT32 label`() {
         val boot = Fat32Structures.buildBootSector(
@@ -23,7 +26,7 @@ class Fat32StructuresTest {
         assertEquals(0xAA.toByte(), boot[511])
         assertEquals("FAT32   ", String(boot.sliceArray(82..89), Charsets.US_ASCII))
         assertEquals("MSDOS5.0", String(boot.sliceArray(3..10), Charsets.US_ASCII))
-        assertEquals(512, intAt(boot, 11))
+        assertEquals(512, shortAt(boot, 11))
         assertEquals(2, boot[16].toInt() and 0xFF)
         assertEquals(2, intAt(boot, 44))
     }
@@ -47,8 +50,8 @@ class Fat32StructuresTest {
     @Test
     fun `volume label normalization pads to 11 and uppercases`() {
         assertEquals("NO NAME   ", Fat32Structures.normalizeVolumeLabel(null))
-        assertEquals("TESTVOL    ", Fat32Structures.normalizeVolumeLabel("testvol"))
-        assertEquals("AB CD      ", Fat32Structures.normalizeVolumeLabel("ab*cd"))
+        assertEquals("TESTVOL".padEnd(11, ' '), Fat32Structures.normalizeVolumeLabel("testvol"))
+        assertEquals("AB CD".padEnd(11, ' '), Fat32Structures.normalizeVolumeLabel("ab*cd"))
         assertEquals("TOOLONGNAM", Fat32Structures.normalizeVolumeLabel("TOOLONGNAMEEXTRA"))
     }
 
