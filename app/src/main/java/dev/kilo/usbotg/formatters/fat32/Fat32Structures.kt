@@ -77,10 +77,7 @@ object Fat32Structures {
         buf.putInt(freeCount.toInt())          // FSI_Free_Count
         buf.putInt(nextFree)                   // FSI_Nxt_Free
         repeat(12) { buf.put(0) }             // reserved
-        buf.putInt(FSINFO_TRAIL_SIG)           // trail signature
-        while (buf.position() < 510) buf.put(0)
-        buf.put(0x55.toByte())
-        buf.put(0xAA.toByte())
+        buf.putInt(FSINFO_TRAIL_SIG)           // trail signature (occupies offsets 508-511)
         return buf.array()
     }
 

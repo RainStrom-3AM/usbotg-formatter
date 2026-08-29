@@ -34,8 +34,6 @@ class Fat32StructuresTest {
         assertEquals(Fat32Structures.FSINFO_LEAD_SIG, intAt(fs, 0))
         assertEquals(Fat32Structures.FSINFO_STRUCT_SIG, intAt(fs, 484))
         assertEquals(Fat32Structures.FSINFO_TRAIL_SIG, intAt(fs, 508))
-        assertEquals(0x55.toByte(), fs[510])
-        assertEquals(0xAA.toByte(), fs[511])
     }
 
     @Test
