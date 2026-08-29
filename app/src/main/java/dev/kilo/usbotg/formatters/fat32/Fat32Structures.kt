@@ -12,7 +12,7 @@ object Fat32Structures {
     const val FSINFO_TRAIL_SIG = 0xAA550000.toInt()
 
     fun normalizeVolumeLabel(label: String?): String {
-        if (label.isNullOrBlank()) return "NO NAME   "
+        if (label.isNullOrBlank()) return "NO NAME    "
         val allowed = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!#\$%&'()-@^_`{}~ "
         val cleaned = label.uppercase(Locale.US)
             .map { if (it in allowed) it else ' ' }
@@ -60,7 +60,7 @@ object Fat32Structures {
         buf.put(0)                                              // BS_Reserved
         buf.put(0x29.toByte())                                  // BS_BootSig
         buf.putInt(volumeId)                                    // BS_VolID
-        buf.put(volumeLabel.toByteArray(Charsets.US_ASCII))     // BS_VolLab (11 bytes)
+        buf.put(normalizeVolumeLabel(volumeLabel).toByteArray(Charsets.US_ASCII)) // BS_VolLab (11 bytes)
         buf.put("FAT32   ".toByteArray(Charsets.US_ASCII))      // BS_FilSysType (8 bytes)
 
         while (buf.position() < 510) buf.put(0)                 // boot code / padding

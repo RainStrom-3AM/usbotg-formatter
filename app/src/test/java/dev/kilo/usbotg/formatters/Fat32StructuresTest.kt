@@ -49,10 +49,10 @@ class Fat32StructuresTest {
 
     @Test
     fun `volume label normalization pads to 11 and uppercases`() {
-        assertEquals("NO NAME   ", Fat32Structures.normalizeVolumeLabel(null))
+        assertEquals("NO NAME    ", Fat32Structures.normalizeVolumeLabel(null))
         assertEquals("TESTVOL".padEnd(11, ' '), Fat32Structures.normalizeVolumeLabel("testvol"))
         assertEquals("AB CD".padEnd(11, ' '), Fat32Structures.normalizeVolumeLabel("ab*cd"))
-        assertEquals("TOOLONGNAM", Fat32Structures.normalizeVolumeLabel("TOOLONGNAMEEXTRA"))
+        assertEquals("TOOLONGNAME", Fat32Structures.normalizeVolumeLabel("TOOLONGNAMEEXTRA"))
     }
 
     @Test
